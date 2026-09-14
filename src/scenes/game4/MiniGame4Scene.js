@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { addBackdrop, createButton, createPanel, pulseSuccess, UI_COLORS } from '../../ui/gameUi.js';
+import { addBackdrop, createButton, createIntroModal, createPanel, pulseSuccess, UI_COLORS } from '../../ui/gameUi.js';
 
 const assetUrl = (file) => `${import.meta.env.BASE_URL}assets/game4/${file}`;
 
@@ -28,6 +28,8 @@ export default class MiniGame4Scene extends Phaser.Scene {
     this.menuButtonBg = null;
     this.menuButtonText = null;
     this.mainMenuButton = null;
+    this.introModal = null;
+    this.started = false;
   }
 
   preload() {
@@ -42,6 +44,8 @@ export default class MiniGame4Scene extends Phaser.Scene {
     const { width, height } = this.scale;
     this.stageIndex = 0;
     this.completed = false;
+    this.started = false;
+    this.introModal = null;
     this.vents = [];
     this.obstacles = [];
 
@@ -114,7 +118,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
     this.menuButtonText = completeButton.text;
 
     this.input.on('dragstart', (pointer, gameObject) => {
-      if (this.completed || !gameObject || gameObject.getData('removed')) return;
+      if (this.completed || !this.started || !gameObject || gameObject.getData('removed')) return;
       gameObject.setDepth(50);
       gameObject.setAlpha(1);
       gameObject.setData('dragStartX', gameObject.x);
@@ -124,7 +128,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
     });
 
     this.input.on('drag', (pointer, gameObject) => {
-      if (this.completed || !gameObject || gameObject.getData('removed')) return;
+      if (this.completed || !this.started || !gameObject || gameObject.getData('removed')) return;
       const worldX = pointer.worldX ?? pointer.x;
       const worldY = pointer.worldY ?? pointer.y;
       const offsetX = gameObject.getData('pointerOffsetX') || 0;
@@ -134,7 +138,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
     });
 
     this.input.on('dragend', (pointer, gameObject) => {
-      if (this.completed || !gameObject || gameObject.getData('removed')) return;
+      if (this.completed || !this.started || !gameObject || gameObject.getData('removed')) return;
 
       const homeX = gameObject.getData('homeX');
       const homeY = gameObject.getData('homeY');
@@ -184,6 +188,14 @@ export default class MiniGame4Scene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this._onShutdown, this);
 
     this._onResize(width, height);
+
+    this.introModal = createIntroModal(this, {
+      title: 'Oyun 04',
+      fill: UI_COLORS.teal,
+      stroke: 0xb8f7e4,
+      onStart: () => { this.started = true; }
+    });
+    this.introModal.resize(width, height);
   }
 
   _forceEndPointerDrag(pointer) {
@@ -238,10 +250,15 @@ export default class MiniGame4Scene extends Phaser.Scene {
   }
 
   _onShutdown() {
+    this.input.removeAllListeners('dragstart');
+    this.input.removeAllListeners('drag');
+    this.input.removeAllListeners('dragend');
     if (this._resizeHandler) {
       this.scale.off('resize', this._resizeHandler);
       this._resizeHandler = null;
     }
+    this.introModal?.destroy();
+    this.introModal = null;
   }
 
   _onResize(width, height) {
@@ -328,5 +345,6 @@ export default class MiniGame4Scene extends Phaser.Scene {
       this.mainMenuButton.rect.setPosition(mx, my);
       this.mainMenuButton.txt.setPosition(mx, my).setFontSize(compact ? 13 : 15);
     }
+    this.introModal?.resize(width, height);
   }
 }

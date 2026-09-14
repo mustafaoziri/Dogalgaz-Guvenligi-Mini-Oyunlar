@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { addBackdrop, createButton, createPanel, pulseSuccess, shakeSoft, UI_COLORS } from '../../ui/gameUi.js';
+import { addBackdrop, createButton, createIntroModal, createPanel, pulseSuccess, shakeSoft, UI_COLORS } from '../../ui/gameUi.js';
 
 const assetUrl = (file) => `${import.meta.env.BASE_URL}assets/game1/${file}`;
 
@@ -80,6 +80,8 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this.continueButton = null; // { rect, txt }
     this.mainMenuButton = null; // { rect, txt }
     this.eyebrowText = null;
+    this.introModal = null;
+    this.started = false;
   }
 
   preload() {
@@ -97,6 +99,8 @@ export default class MiniGame1Scene extends Phaser.Scene {
   create() {
     const { width, height } = this.scale;
     this.currentScenarioIndex = 0;
+    this.started = false;
+    this.introModal = null;
     this.backdrop = addBackdrop(this, { color: 0x102a3d, accent: UI_COLORS.blue, secondary: UI_COLORS.teal, depth: -220 });
     this.bgFill = this.add.rectangle(0, 0, width, height, 0x102a3d, 0.56).setOrigin(0).setDepth(-10);
     const mediaBounds = this._getMediaBounds(width, height);
@@ -141,6 +145,14 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this._renderCurrentScenario();
     this._onResize(width, height);
 
+    this.introModal = createIntroModal(this, {
+      title: 'Oyun 01',
+      fill: UI_COLORS.blue,
+      stroke: 0xb8dfea,
+      onStart: () => this._startGame()
+    });
+    this.introModal.resize(width, height);
+
     // Resize handler
     this._resizeHandler = (gameSize) => {
       this._onResize(gameSize.width, gameSize.height);
@@ -184,6 +196,12 @@ export default class MiniGame1Scene extends Phaser.Scene {
     });
   }
 
+  _startGame() {
+    if (this.started) return;
+    this.started = true;
+    if (this.video) this.video.play(true);
+  }
+
   _fitTextToWidth(txt, maxWidth, minFont = 10) {
     // start from current or default size
     let size = 18;
@@ -204,6 +222,7 @@ export default class MiniGame1Scene extends Phaser.Scene {
   }
 
   _onOptionSelected(option, rect) {
+    if (!this.started) return;
     // Görsel geribildirim
     const correct = !!option.isCorrect;
     // Renk değişimi
@@ -309,7 +328,7 @@ export default class MiniGame1Scene extends Phaser.Scene {
       const mediaBounds = this._getMediaBounds(width, height);
       this.video = this.add.video(mediaBounds.x, mediaBounds.y, key).setOrigin(0.5).setDepth(-4);
       this.video.setMask(this.mediaMask);
-      this.video.play(true);
+      if (this.started) this.video.play(true);
       const adjustVideo = () => this._resizeVideo(this.scale.width, this.scale.height);
       if (this.video.getVideoWidth && this.video.getVideoWidth() > 0) adjustVideo();
       else {
@@ -542,6 +561,8 @@ export default class MiniGame1Scene extends Phaser.Scene {
       this.scale.off('resize', this._resizeHandler);
       this._resizeHandler = null;
     }
+    this.introModal?.destroy();
+    this.introModal = null;
     this.mediaMaskGraphics?.destroy();
     this.mediaMaskGraphics = null;
     this.mediaMask = null;
@@ -563,6 +584,7 @@ export default class MiniGame1Scene extends Phaser.Scene {
       this.eyebrowText
         ?.setPosition(compact ? 14 : 20, compact ? 16 : 18)
         .setFontSize(compact ? 11 : 14);
+      this.introModal?.resize(width, height);
 
       if (this.feedbackText) {
         this.feedbackText

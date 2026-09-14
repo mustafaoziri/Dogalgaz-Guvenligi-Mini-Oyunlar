@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { addBackdrop, createButton, createPanel, pulseSuccess, UI_COLORS } from '../../ui/gameUi.js';
+import { addBackdrop, createButton, createIntroModal, createPanel, pulseSuccess, UI_COLORS } from '../../ui/gameUi.js';
 
 const assetUrl = (file) => `${import.meta.env.BASE_URL}assets/game2/${file}`;
 
@@ -59,6 +59,8 @@ export default class MiniGame2Scene extends Phaser.Scene {
     this._layoutHeight = 0;
     this.backdrop = null;
     this.mediaFrame = null;
+    this.introModal = null;
+    this.started = false;
   }
 
   preload() {
@@ -83,6 +85,8 @@ export default class MiniGame2Scene extends Phaser.Scene {
     this.itemSprites = {};
     this.itemState = {};
     this.completed = false;
+    this.started = false;
+    this.introModal = null;
     // Scene nesnesi yeniden kullanılır. Önceki çalıştırmada Phaser tarafından
     // yok edilen başlık/düğme referansları kalırsa ilk responsive yerleşim
     // bunları güncellemeye çalışıp create akışını yarıda kesebilir.
@@ -214,6 +218,13 @@ export default class MiniGame2Scene extends Phaser.Scene {
 
     // Başlık ve menü butonu oluşturulduktan sonra mobil üst barı da yerleştir.
     this.resizeElements(this.scale.width, this.scale.height);
+    this.introModal = createIntroModal(this, {
+      title: 'Oyun 02',
+      fill: UI_COLORS.teal,
+      stroke: 0xb8f7e4,
+      onStart: () => { this.started = true; }
+    });
+    this.introModal.resize(this.scale.width, this.scale.height);
   }
 
   _onShutdown() {
@@ -226,6 +237,8 @@ export default class MiniGame2Scene extends Phaser.Scene {
       this.input.off('pointerdown', this._backgroundPointerHandler);
       this._backgroundPointerHandler = null;
     }
+    this.introModal?.destroy();
+    this.introModal = null;
     this.cameraSyncFrames = 0;
     window.__refreshGameViewport?.();
   }
@@ -282,7 +295,7 @@ export default class MiniGame2Scene extends Phaser.Scene {
   }
 
   handleItemClick(sprite) {
-    if (this.completed) return;
+    if (this.completed || !this.started) return;
     const id = sprite.getData('id');
     if (this.itemState[id]) return; // already fixed
 
@@ -401,6 +414,8 @@ export default class MiniGame2Scene extends Phaser.Scene {
         .setPosition(mx, my)
         .setFontSize(compact ? 12 : 15);
     }
+
+    this.introModal?.resize(width, height);
 
     if (this.completionOverlay) {
       this.completionOverlay.setDisplaySize(width, height);

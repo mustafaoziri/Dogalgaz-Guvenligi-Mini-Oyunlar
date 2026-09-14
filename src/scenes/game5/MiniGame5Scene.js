@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { addBackdrop, createButton, createPanel, pulseSuccess, shakeSoft, UI_COLORS } from '../../ui/gameUi.js';
+import { addBackdrop, createButton, createIntroModal, createPanel, pulseSuccess, shakeSoft, UI_COLORS } from '../../ui/gameUi.js';
 
 const assetUrl = (file) => `${import.meta.env.BASE_URL}assets/game5/${file}`;
 
@@ -44,6 +44,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this.transitioning = false;
     this.cursors = null;
     this.mainMenuButton = null;
+    this.introModal = null;
+    this.started = false;
   }
 
   preload() {
@@ -65,6 +67,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this.inputCooldown = 0;
     this.resultAction = 'restart';
     this.transitioning = false;
+    this.started = false;
+    this.introModal = null;
 
     this.backdrop = addBackdrop(this, { color: 0xf3f0fb, accent: UI_COLORS.lavender, secondary: UI_COLORS.teal, depth: -200 });
     this.bgFill = this.add.rectangle(0, 0, width, height, 0xf3f0fb, 0.3).setOrigin(0).setDepth(-100);
@@ -143,6 +147,14 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, this._onShutdown, this);
 
     this._onResize(width, height);
+
+    this.introModal = createIntroModal(this, {
+      title: 'Oyun 05',
+      fill: UI_COLORS.lavender,
+      stroke: 0xe7e0ff,
+      onStart: () => { this.started = true; }
+    });
+    this.introModal.resize(width, height);
   }
 
   _createButton(x, y, label, handler) {
@@ -153,7 +165,7 @@ export default class MiniGame5Scene extends Phaser.Scene {
   }
 
   _nudgeNeedle(delta) {
-    if (this.isFinished) return;
+    if (this.isFinished || !this.started) return;
     this._animateValve(Math.sign(delta));
     this.inputCount += 1;
     this.angularVelocity += delta * 0.9;
@@ -204,7 +216,7 @@ export default class MiniGame5Scene extends Phaser.Scene {
   }
 
   update(time, delta) {
-    if (this.isFinished) return;
+    if (this.isFinished || !this.started) return;
 
     // Büyük kare gecikmelerini sınırlamak, sekme geri geldiğinde fiziğin ve
     // sayacın bir anda sona atlayıp sahneyi kilitlenmiş gibi göstermesini önler.
@@ -273,6 +285,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
       this.scale.off('resize', this._resizeHandler);
       this._resizeHandler = null;
     }
+    this.introModal?.destroy();
+    this.introModal = null;
   }
 
   _showResult(title, body, actionLabel, action = 'restart') {
@@ -400,6 +414,7 @@ export default class MiniGame5Scene extends Phaser.Scene {
       this.mainMenuButton.rect.setPosition(mx, my);
       this.mainMenuButton.txt.setPosition(mx, my).setFontSize(compact ? 13 : 15);
     }
+    this.introModal?.resize(width, height);
     this.titleText?.setVisible(!compact);
   }
 }
