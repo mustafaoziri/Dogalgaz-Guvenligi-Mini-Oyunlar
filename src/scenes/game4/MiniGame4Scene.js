@@ -47,7 +47,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
 
     this.backdrop = addBackdrop(this, { color: 0xeaf6f5, accent: UI_COLORS.teal, secondary: UI_COLORS.amber, depth: -200 });
     this.bgFill = this.add.rectangle(0, 0, width, height, 0xeaf6f5, 0.35).setOrigin(0).setDepth(-100);
-    this.eyebrowText = this.add.text(20, 18, 'OYUN 04  •  TEMİZ HAVA', { fontSize: '14px', color: '#147565', fontStyle: 'bold' }).setDepth(50);
+    this.eyebrowText = this.add.text(20, 18, 'OYUN 04  •  GAZO VE MENFEZLER', { fontSize: '14px', color: '#147565', fontStyle: 'bold' }).setDepth(50);
     this.instructionText = this.add.text(width / 2, 54, 'Engelleri sürükleyip menfezlerden uzaklaştır.', {
       fontSize: '20px',
       color: '#17324d',

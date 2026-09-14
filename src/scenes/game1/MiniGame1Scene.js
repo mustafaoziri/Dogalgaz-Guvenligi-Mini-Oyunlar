@@ -79,6 +79,7 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this.scenarioText = null; // overlay descriptive text shown over media
     this.continueButton = null; // { rect, txt }
     this.mainMenuButton = null; // { rect, txt }
+    this.eyebrowText = null;
   }
 
   preload() {
@@ -113,6 +114,12 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this.mediaMaskGraphics = this.make.graphics({ add: false });
     this.mediaMask = this.mediaMaskGraphics.createGeometryMask();
     this._updateMediaMask(mediaBounds);
+
+    this.eyebrowText = this.add.text(20, 18, 'OYUN 01  •  DOĞRU SEÇİMİ BUL', {
+      fontSize: '14px',
+      color: '#b8d7f5',
+      fontStyle: 'bold'
+    }).setDepth(60);
 
     const menuButton = createButton(this, {
       x: width - 92, y: 34, width: 164, height: 46, label: '←  Ana Menü',
@@ -552,6 +559,10 @@ export default class MiniGame1Scene extends Phaser.Scene {
       this.mediaFrame?.resizePanel(mediaBounds.width + 16, mediaBounds.height + 16);
 
       const compact = width < 620;
+
+      this.eyebrowText
+        ?.setPosition(compact ? 14 : 20, compact ? 16 : 18)
+        .setFontSize(compact ? 11 : 14);
 
       if (this.feedbackText) {
         this.feedbackText

@@ -47,7 +47,7 @@ export default class MiniGame3Scene extends Phaser.Scene {
       depth: -200
     });
 
-    this.eyebrowText = this.add.text(20, 18, 'OYUN 03  •  ACİL DURUM', {
+    this.eyebrowText = this.add.text(20, 18, 'OYUN 03  •  GAZ KAÇAĞI', {
       fontSize: '14px',
       color: '#b94f3c',
       fontStyle: 'bold'
