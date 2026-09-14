@@ -260,7 +260,7 @@ export default class MiniGame3Scene extends Phaser.Scene {
       targets: card,
       x: slot.x,
       y: slot.y,
-      scale: 0.72,
+      scale: 1,
       duration: 190,
       ease: 'Back.easeOut',
       onComplete: () => pulseSuccess(this, [card])
@@ -365,8 +365,8 @@ export default class MiniGame3Scene extends Phaser.Scene {
     const slotColumns = compact ? 2 : 4;
     const slotRows = Math.ceil(this.slots.length / slotColumns);
     const slotGapX = compact ? 18 : Math.max(22, Math.round(width * 0.025));
-    const slotWidth = Math.round(Math.min(210, (width - margin * 2 - slotGapX * (slotColumns - 1)) / slotColumns));
-    const slotHeight = Math.round(slotWidth * 0.58);
+    const slotWidth = cardWidth;
+    const slotHeight = cardHeight;
     const slotGapY = compact ? 16 : 0;
     const totalSlotsWidth = slotColumns * slotWidth + (slotColumns - 1) * slotGapX;
     const slotStartX = width / 2 - totalSlotsWidth / 2 + slotWidth / 2;
