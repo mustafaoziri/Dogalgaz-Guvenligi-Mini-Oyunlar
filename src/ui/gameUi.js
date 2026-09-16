@@ -114,7 +114,7 @@ export function createIntroModal(scene, {
     .setDepth(2000)
     .setInteractive();
   const panel = scene.add.container(width / 2, height / 2).setDepth(2001);
-  const panelBg = createPanel(scene, 0, 0, Math.min(460, width - 40), 230, {
+  const panelBg = createPanel(scene, 0, 0, Math.min(460, width - 40), 300, {
     fill: UI_COLORS.paper,
     stroke,
     radius: 24,
@@ -138,7 +138,7 @@ export function createIntroModal(scene, {
   let started = false;
   const startButton = createButton(scene, {
     x: width / 2,
-    y: height / 2 + 72,
+    y: height / 2 + 102,
     width: 190,
     height: 54,
     label: 'Başla  ›',
@@ -165,25 +165,25 @@ export function createIntroModal(scene, {
     resize(nextWidth, nextHeight) {
       const compact = nextWidth < 620;
       const panelWidth = Math.min(460, nextWidth - 40);
-      const panelHeight = compact ? 214 : 230;
+      const panelHeight = compact ? 280 : 300;
       const centerX = Math.round(nextWidth / 2);
       const centerY = Math.round(nextHeight / 2);
       overlay.setDisplaySize(nextWidth, nextHeight).setPosition(0, 0);
       panel.setPosition(centerX, centerY);
       panelBg.resizePanel(panelWidth, panelHeight);
       modalTitle
-        .setPosition(0, compact ? -48 : -54)
+        .setPosition(0, compact ? -88 : -92)
         .setFontSize(compact ? 23 : 28)
         .setWordWrapWidth(Math.min(380, nextWidth - 64));
       modalBody
-        .setPosition(0, compact ? -2 : 0)
+        .setPosition(0, compact ? -10 : -8)
         .setFontSize(compact ? 15 : 17)
         .setWordWrapWidth(Math.min(370, nextWidth - 64));
       startButton.bg
         .setDisplaySize(compact ? 172 : 190, compact ? 50 : 54)
-        .setPosition(centerX, centerY + (compact ? 68 : 72));
+        .setPosition(centerX, centerY + (compact ? 92 : 102));
       startButton.text
-        .setPosition(centerX, centerY + (compact ? 68 : 72))
+        .setPosition(centerX, centerY + (compact ? 92 : 102))
         .setFontSize(compact ? 16 : 17);
     },
     isStarted() {
