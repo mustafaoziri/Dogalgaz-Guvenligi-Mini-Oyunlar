@@ -219,7 +219,8 @@ export default class MiniGame2Scene extends Phaser.Scene {
     // Başlık ve menü butonu oluşturulduktan sonra mobil üst barı da yerleştir.
     this.resizeElements(this.scale.width, this.scale.height);
     this.introModal = createIntroModal(this, {
-      title: 'Oyun 02',
+      title: 'Oyun 2 - Tehlikeyi Bul',
+      body: 'Bu mini oyunda, mutfaktaki tehlikeleri bulman gerekiyor. Tehlikeli durumları tespit edip üzerine tıklayarak güvenli bir ortam sağla!',
       fill: UI_COLORS.teal,
       stroke: 0xb8f7e4,
       onStart: () => { this.started = true; }

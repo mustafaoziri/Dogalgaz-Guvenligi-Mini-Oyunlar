@@ -176,7 +176,8 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this._onResize(width, height);
 
     this.introModal = createIntroModal(this, {
-      title: 'Oyun 01',
+      title: 'Oyun 1 - Doğru Seçimi Bul',
+      body: 'Bu mini oyunda, karşına çıkan duruma göre en doğru seçimi bulman gerekiyor. Her senaryoda bir görsel çıkacak ve sana üç seçenek sunulacak. Doğru seçimi yaparak ilerle ve tüm senaryoları tamamla!',
       fill: UI_COLORS.blue,
       stroke: 0xb8dfea,
       onStart: () => this._startGame()

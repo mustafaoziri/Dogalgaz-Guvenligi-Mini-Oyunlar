@@ -103,7 +103,8 @@ export default class MiniGame3Scene extends Phaser.Scene {
     this._onResize(width, height, false);
 
     this.introModal = createIntroModal(this, {
-      title: 'Oyun 03',
+      title: 'Oyun 3 - Gaz Kaçağı',
+      body: 'Mutfakta doğal gaz kokusu aldın! Bu mini oyunda, güvenli adımları doğru sırayla sürükleyerek yerleştirmen gerekiyor. Adımları doğru sırayla yerleştirerek gaz kaçağını durdur!',
       fill: UI_COLORS.coral,
       stroke: 0xf0c4ba,
       onStart: () => this._startGame()

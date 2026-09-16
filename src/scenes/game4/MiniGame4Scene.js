@@ -103,7 +103,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
       fill: UI_COLORS.paper, stroke: 0xb8d8c6, radius: 24, shadowAlpha: 0.24
     });
     this.completionText = this.add.text(0, -42, '✓  Tebrikler!', { fontSize: '30px', color: '#2f7c50', fontStyle: 'bold' }).setOrigin(0.5);
-    const body = this.add.text(0, 6, 'Menfezlerin önündeki tüm engeller kaldırıldı.', {
+    const body = this.add.text(0, 6, 'Menfezlerin önündeki tüm engeller kaldırıldı.\n Artık GAZO rahat nefes alabilir.', {
       fontSize: '18px',
       color: '#49657d'
     }).setOrigin(0.5);
@@ -190,7 +190,8 @@ export default class MiniGame4Scene extends Phaser.Scene {
     this._onResize(width, height);
 
     this.introModal = createIntroModal(this, {
-      title: 'Oyun 04',
+      title: 'Oyun 4 - GAZO ve Menfezler',
+      body: 'Karakterimiz GAZO nefes almakta zorlanıyor! Bu mini oyunda, menfezlerin önündeki engelleri sürükleyip menfezlerden uzaklaştırman gerekiyor. Tüm engelleri kaldırarak GAZO\'nun güvenli bir şekilde nefes almasını sağla!',
       fill: UI_COLORS.teal,
       stroke: 0xb8f7e4,
       onStart: () => { this.started = true; }

@@ -149,7 +149,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this._onResize(width, height);
 
     this.introModal = createIntroModal(this, {
-      title: 'Oyun 05',
+      title: 'Oyun 5 - Basınç Ustası',
+      body: 'Bu mini oyunda, basınç ibresini güvenli bölgede tutman gerekiyor. İbreyi 1 bar ile 2 bar arasında tutmak için yön tuşlarını kullanarak ibreyi dengele. Bu sırada süreye dikkat et!',
       fill: UI_COLORS.lavender,
       stroke: 0xe7e0ff,
       onStart: () => { this.started = true; }
