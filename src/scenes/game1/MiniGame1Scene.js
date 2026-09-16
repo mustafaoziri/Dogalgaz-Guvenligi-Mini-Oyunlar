@@ -89,6 +89,8 @@ export default class MiniGame1Scene extends Phaser.Scene {
 
   preload() {
     // Tüm senaryolardaki gerekli assetleri yükle
+    this.load.audio('game1_correct_answer', assetUrl('correct_answer.mp3'));
+    this.load.audio('game1_wrong_answer', assetUrl('wrong_answer.mp3'));
     this.scenarios.forEach((s, i) => {
       if (s.hasVideo && s.videoPath) {
         this.load.video(`game1_video_${i}`, s.videoPath, 'loadeddata', false, true);
@@ -256,6 +258,7 @@ export default class MiniGame1Scene extends Phaser.Scene {
     if (!this.started) return;
     // Görsel geribildirim
     const correct = !!option.isCorrect;
+    this.sound.play(correct ? 'game1_correct_answer' : 'game1_wrong_answer');
     // Renk değişimi
     rect.setFillStyle(correct ? 0x388e3c : 0xd32f2f);
 

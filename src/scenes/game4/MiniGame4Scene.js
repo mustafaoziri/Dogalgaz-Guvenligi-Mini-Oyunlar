@@ -33,6 +33,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.audio('game4_remove_sound', assetUrl('remove_sound.mp3'));
     this.load.image(VENT_KEY, assetUrl('menfez.png'));
     this.load.image(OBSTACLE_KEY, assetUrl('engel.png'));
     GAZO_KEYS.forEach((key, idx) => {
@@ -213,6 +214,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
   _advanceStage() {
     if (this.completed) return;
 
+    this.sound.play('game4_remove_sound');
     this.stageIndex = Math.min(this.stageIndex + 1, GAZO_KEYS.length - 1);
     const nextKey = GAZO_KEYS[this.stageIndex];
     if (this.gazo && this.textures.exists(nextKey)) {

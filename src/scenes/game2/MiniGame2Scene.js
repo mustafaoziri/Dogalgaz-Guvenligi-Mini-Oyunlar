@@ -67,6 +67,7 @@ export default class MiniGame2Scene extends Phaser.Scene {
     // Background (user will place actual image at this path)
     // Load from public/assets with BASE_URL so subpath deployments are supported
     this.load.image('game2_bg', assetUrl('background.png'));
+    this.load.audio('game2_pick_sound', assetUrl('pick_sound.mp3'));
 
     // Load item image pairs from ITEM_DEFS
     Object.keys(ITEM_DEFS).forEach((id) => {
@@ -303,6 +304,7 @@ export default class MiniGame2Scene extends Phaser.Scene {
     // Swap texture to 'clicked' version
     sprite.setTexture(sprite.getData('onKey'));
     this.itemState[id] = true;
+    this.sound.play('game2_pick_sound');
 
     // Show info box with description
     this.infoText.setText(sprite.getData('desc'));

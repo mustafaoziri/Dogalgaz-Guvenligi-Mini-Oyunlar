@@ -27,6 +27,8 @@ export default class MiniGame3Scene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.audio('game3_correct_answer', assetUrl('correct_answer.mp3'));
+    this.load.audio('game3_wrong_answer', assetUrl('wrong_answer.mp3'));
     OPTIONS.forEach(({ icon }) => {
       const key = `${ICON_KEY_PREFIX}${icon}`;
       if (!this.textures.exists(key)) {
@@ -241,6 +243,7 @@ export default class MiniGame3Scene extends Phaser.Scene {
     if (card.getData('id') !== activeSlot.getData('requiredId')) {
       const option = card.getData('option');
       const belongsLater = REQUIRED_ORDER.includes(card.getData('id'));
+      this.sound.play('game3_wrong_answer');
       this._showError(belongsLater
         ? 'Bu güvenli bir adım, ama sırası henüz gelmedi.'
         : (option.wrongMsg || 'Bu davranış güvenli değil. Başka bir kart dene.'));
@@ -267,6 +270,7 @@ export default class MiniGame3Scene extends Phaser.Scene {
   }
 
   _placeCard(card, slot, hitZone) {
+    this.sound.play('game3_correct_answer');
     card.setData('placed', true);
     slot.setData('occupied', true);
     slot.setData('active', false);

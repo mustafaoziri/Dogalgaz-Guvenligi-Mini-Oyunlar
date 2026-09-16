@@ -6,11 +6,11 @@ const assetUrl = (file) => `${import.meta.env.BASE_URL}assets/game5/${file}`;
 const SAFE_MIN = -31;
 const SAFE_MAX = 32;
 const showSafeAngles = false;
-const TIMER_SECONDS = 30;
+const TIMER_SECONDS = 20;
 const NEEDLE_MIN = -90;
 const NEEDLE_MAX = 90;
 const REQUIRED_SAFE_SECONDS = 20;
-const REQUIRED_INPUTS = 4;
+const REQUIRED_INPUTS = 2;
 
 export default class MiniGame5Scene extends Phaser.Scene {
   constructor() {
@@ -49,6 +49,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.audio('game5_correct_answer', assetUrl('correct_answer.mp3'));
+    this.load.audio('game5_wrong_answer', assetUrl('wrong_answer.mp3'));
     this.load.image('game5_valve', assetUrl('vana.png'));
     this.load.image('game5_pressure_meter', assetUrl('pressure_meter.png'));
     this.load.image('game5_needle', assetUrl('ibre.png'));
@@ -261,6 +263,7 @@ export default class MiniGame5Scene extends Phaser.Scene {
 
     const success = this.currentAngle >= SAFE_MIN
       && this.currentAngle <= SAFE_MAX;
+    this.sound.play(success ? 'game5_correct_answer' : 'game5_wrong_answer');
     if (success) {
       this._markGameCompleted();
       this._showResult('✓  Tebrikler!', 'Basınç ibresini 1 bar ile 2 bar arasında tuttun.', 'Ana Menüye Dön', 'menu');
