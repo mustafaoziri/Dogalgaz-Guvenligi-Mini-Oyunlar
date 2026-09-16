@@ -109,27 +109,27 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.lastDisplayedSecond = TIMER_SECONDS;
 
-    this.overlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.68)
+    this.overlay = this.add.rectangle(0, 0, width, height, 0x102a3d, 0.72)
       .setOrigin(0)
       .setDepth(1000)
       .setVisible(false)
       .setInteractive();
 
     this.panel = this.add.container(width / 2, height / 2).setDepth(1001).setVisible(false);
-    const panelBg = createPanel(this, 0, 0, Math.min(440, width - 40), 250, {
-      fill: UI_COLORS.paper, stroke: 0xc9c0e8, radius: 24, shadow: false
+    const panelBg = createPanel(this, 0, 0, Math.min(460, width - 40), 230, {
+      fill: UI_COLORS.paper, stroke: 0xb8d8c6, radius: 24, shadowAlpha: 0.25
     });
-    this.panelTitle = this.add.text(0, -58, '', { fontSize: '30px', color: '#17324d', fontStyle: 'bold', align: 'center' }).setOrigin(0.5);
-    this.panelBody = this.add.text(0, -8, '', {
+    this.panelTitle = this.add.text(0, -54, '', { fontSize: '30px', color: '#2f7c50', fontStyle: 'bold', align: 'center' }).setOrigin(0.5);
+    this.panelBody = this.add.text(0, 0, '', {
       fontSize: '18px',
       color: '#49657d',
       align: 'center',
-      wordWrap: { width: Math.min(340, width - 80) }
+      wordWrap: { width: Math.min(380, width - 80) }
     }).setOrigin(0.5);
     this.panel.add([panelBg, this.panelTitle, this.panelBody]);
     const actionButton = createButton(this, {
-      x: width / 2, y: height / 2 + 78, width: 228, height: 54, label: '',
-      fill: UI_COLORS.lavender, stroke: 0xe7e0ff, depth: 1002
+      x: width / 2, y: height / 2 + 72, width: 228, height: 54, label: '',
+      fill: UI_COLORS.green, stroke: 0xd8f5e3, depth: 1002
     });
     actionButton.bg.setVisible(false);
     this.panelActionBg = actionButton.bg;
@@ -259,17 +259,15 @@ export default class MiniGame5Scene extends Phaser.Scene {
     this.isFinished = true;
 
     const success = this.currentAngle >= SAFE_MIN
-      && this.currentAngle <= SAFE_MAX
-      && this.safeElapsed >= REQUIRED_SAFE_SECONDS
-      && this.inputCount >= REQUIRED_INPUTS;
+      && this.currentAngle <= SAFE_MAX;
     if (success) {
       this._markGameCompleted();
-      this._showResult('Tebrikler!', 'Basınç ibresini güvenli aralıkta tuttun.', 'Ana Menüye Dön', 'menu');
+      this._showResult('✓  Tebrikler!', 'Basınç ibresini 1 bar ile 2 bar arasında tuttun.', 'Ana Menüye Dön', 'menu');
       pulseSuccess(this, [this.panel, this.panelActionBg.face]);
     } else {
       const body = this.inputCount < REQUIRED_INPUTS
         ? 'Basınç kendiliğinden değişir. Yön tuşlarıyla aktif olarak dengele.'
-        : 'İbreyi güvenli bölgede daha uzun süre tutmalısın.';
+        : 'İbreyi güvenli bölgede tutmalısın.';
       this._showResult('Tekrar dene', body, 'Yeniden Dene', 'restart');
       shakeSoft(this, this.panel);
     }
@@ -404,8 +402,8 @@ export default class MiniGame5Scene extends Phaser.Scene {
         this.panelBody.setWordWrapWidth(Math.min(340, width - 80));
       }
     }
-    this.panelActionBg?.setPosition(centerX, centerY + 78);
-    this.panelActionText?.setPosition(centerX, centerY + 78);
+    this.panelActionBg?.setPosition(centerX, centerY + 72);
+    this.panelActionText?.setPosition(centerX, centerY + 72);
 
     if (this.mainMenuButton) {
       const mx = Math.round(width - (compact ? 72 : 90));

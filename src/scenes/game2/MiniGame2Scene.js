@@ -150,7 +150,7 @@ export default class MiniGame2Scene extends Phaser.Scene {
       color: '#2f7c50',
       fontStyle: 'bold'
     }).setOrigin(0.5);
-    this.completionBody = this.add.text(0, 0, 'Tüm tehlikeleri buldun ve Mini Oyun 2 tamamlandı.', {
+    this.completionBody = this.add.text(0, 0, 'Mutfaktaki tüm tehlikeleri buldun.', {
       fontSize: '18px',
       color: '#49657d',
       align: 'center',

@@ -81,6 +81,9 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this.mainMenuButton = null; // { rect, txt }
     this.eyebrowText = null;
     this.introModal = null;
+    this.completionOverlay = null;
+    this.completionPanel = null;
+    this.completionButton = null;
     this.started = false;
   }
 
@@ -140,6 +143,33 @@ export default class MiniGame1Scene extends Phaser.Scene {
       fontSize: '20px', color: '#fff', backgroundColor: '#17324d', padding: { x: 18, y: 11 },
       align: 'center', wordWrap: { width: Math.max(220, width - 48) }
     }).setOrigin(0.5).setVisible(false).setDepth(190);
+
+    this.completionOverlay = this.add.rectangle(0, 0, width, height, 0x102a3d, 0.72)
+      .setOrigin(0)
+      .setDepth(5000)
+      .setVisible(false)
+      .setInteractive();
+    this.completionPanel = this.add.container(width / 2, height / 2).setDepth(5001).setVisible(false);
+    const completionPanelBg = createPanel(this, 0, 0, Math.min(460, width - 40), 230, {
+      fill: UI_COLORS.paper, stroke: 0xb8d8c6, radius: 24, shadowAlpha: 0.25
+    });
+    const completionTitle = this.add.text(0, -54, '✓  Tebrikler!', {
+      fontSize: '30px', color: '#2f7c50', fontStyle: 'bold', align: 'center'
+    }).setOrigin(0.5);
+    const completionBody = this.add.text(0, 0, 'Tüm senaryoları başarıyla tamamladın.', {
+      fontSize: '18px', color: '#49657d', align: 'center',
+      wordWrap: { width: Math.min(380, width - 80) }
+    }).setOrigin(0.5);
+    this.completionPanel.add([completionPanelBg, completionTitle, completionBody]);
+    this.completionButton = createButton(this, {
+      x: width / 2, y: height / 2 + 72, width: 228, height: 54,
+      label: 'Ana Menüye Dön  ›', fill: UI_COLORS.green, stroke: 0xd8f5e3,
+      depth: 5002, onClick: () => {
+        this._markGameCompleted();
+        this.scene.start('MainMenu');
+      }
+    });
+    this.completionButton.bg.setVisible(false);
 
     // Seçenek butonlarını oluştur
     this._renderCurrentScenario();
@@ -268,9 +298,10 @@ export default class MiniGame1Scene extends Phaser.Scene {
           }
       }
 
-      // feedback'i göster ve devam butonunu çıkar (son senaryo ise menü butonu göster)
+      // feedback'i göster ve devam butonunu çıkar (son senaryo ise bitiş popup'ını göster)
       const isLast = this.currentScenarioIndex === this.scenarios.length - 1;
-      this._showContinueButton(isLast);
+      if (isLast) this._showCompletionUI();
+      else this._showContinueButton(false);
     } else {
       // Yanlışsa, kısa gösterip normal duruma dön
       this.time.delayedCall(1600, () => {
@@ -543,6 +574,21 @@ export default class MiniGame1Scene extends Phaser.Scene {
     this.continueButton = { rect: button.bg, txt: button.text, isLast };
   }
 
+  _showCompletionUI() {
+    this._markGameCompleted();
+    this.completionOverlay?.setVisible(true);
+    this.completionPanel?.setVisible(true).setScale(0.92).setAlpha(0);
+    this.completionButton?.bg.setVisible(true);
+    this.tweens.add({
+      targets: this.completionPanel,
+      alpha: 1,
+      scale: 1,
+      duration: 230,
+      ease: 'Back.easeOut'
+    });
+    pulseSuccess(this, [this.completionButton?.bg.face].filter(Boolean));
+  }
+
   _destroyContinueButton() {
     if (!this.continueButton) return;
     try {
@@ -585,6 +631,14 @@ export default class MiniGame1Scene extends Phaser.Scene {
         ?.setPosition(compact ? 14 : 20, compact ? 16 : 18)
         .setFontSize(compact ? 11 : 14);
       this.introModal?.resize(width, height);
+
+      this.completionOverlay?.setDisplaySize(width, height).setPosition(0, 0);
+      this.completionPanel?.setPosition(width / 2, height / 2);
+      const completionPanelBg = this.completionPanel?.list?.[0];
+      completionPanelBg?.resizePanel?.(Math.min(460, width - 40), 230);
+      this.completionPanel?.list?.[2]?.setWordWrapWidth(Math.min(380, width - 80));
+      this.completionButton?.bg.setPosition(width / 2, height / 2 + 72);
+      this.completionButton?.text.setPosition(width / 2, height / 2 + 72);
 
       if (this.feedbackText) {
         this.feedbackText

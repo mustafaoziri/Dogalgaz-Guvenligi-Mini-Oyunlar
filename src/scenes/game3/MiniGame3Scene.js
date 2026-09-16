@@ -436,7 +436,7 @@ export default class MiniGame3Scene extends Phaser.Scene {
       radius: 24,
       shadowAlpha: 0.24
     });
-    const title = this.add.text(0, -56, '✓  Harika, doğru sıralama!', {
+    const title = this.add.text(0, -56, '✓  Tebrikler!', {
       fontSize: '27px',
       color: '#2f7c50',
       fontStyle: 'bold',

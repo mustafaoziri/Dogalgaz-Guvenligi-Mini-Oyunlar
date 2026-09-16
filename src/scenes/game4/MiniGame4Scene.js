@@ -103,7 +103,7 @@ export default class MiniGame4Scene extends Phaser.Scene {
       fill: UI_COLORS.paper, stroke: 0xb8d8c6, radius: 24, shadowAlpha: 0.24
     });
     this.completionText = this.add.text(0, -42, '✓  Tebrikler!', { fontSize: '30px', color: '#2f7c50', fontStyle: 'bold' }).setOrigin(0.5);
-    const body = this.add.text(0, 6, 'Tüm engeller kaldırıldı.', {
+    const body = this.add.text(0, 6, 'Menfezlerin önündeki tüm engeller kaldırıldı.', {
       fontSize: '18px',
       color: '#49657d'
     }).setOrigin(0.5);
